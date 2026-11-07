@@ -1,0 +1,43 @@
+neurons: 128  tokens: 2000
+
+A. same formula, decay != 2, self loops kept (ours keep_self_loops=True)
+   max |K_ours - K_x| over all entries
+    decay     k | reimpl t=1e-4   reimpl t=0   graphtools |  gt kNN (data)
+     40.0     5 |     6.01e-05     0.00e+00     6.01e-05 |       6.01e-05
+     40.0    10 |     6.42e-05     0.00e+00     6.42e-05 |       6.42e-05
+      5.0     5 |     1.70e-05     0.00e+00     1.70e-05 |       1.70e-05
+      5.0    10 |     4.27e-05     0.00e+00     4.27e-05 |       4.27e-05
+      2.5     5 |     0.00e+00     0.00e+00     0.00e+00 |       2.44e-15
+      2.5    10 |     0.00e+00     0.00e+00     0.00e+00 |       2.50e-15
+
+B. decay = 2: ours switches to the Zelnik-Manor form exp(-d^2/(s_i s_j)),
+   graphtools keeps (exp(-d^2/s_i^2) + exp(-d^2/s_j^2)) / 2
+   k= 5: max |K_ours(2) - K_gt(2)| = 0.010;  max |K_ours(2) - K_ours(2+1e-9)| = 0.010
+          mu_0..7 ours: [-4.4409e-16  2.3508e-01  2.4721e-01  2.7398e-01  9.1802e-01  9.3422e-01
+  9.3880e-01  9.3989e-01]   k*=4
+          mu_0..7 gt  : [0.     0.2462 0.26   0.2848 0.9267 0.9345 0.9391 0.9405]   k*=4
+   k=10: max |K_ours(2) - K_gt(2)| = 0.011;  max |K_ours(2) - K_ours(2+1e-9)| = 0.011
+          mu_0..7 ours: [3.3307e-16 2.5925e-01 2.7009e-01 3.0124e-01 9.2538e-01 9.4056e-01
+ 9.4394e-01 9.4448e-01]   k*=4
+          mu_0..7 gt  : [-2.2204e-16  2.6863e-01  2.8169e-01  3.1144e-01  9.3225e-01  9.4067e-01
+  9.4352e-01  9.4497e-01]   k*=4
+
+C. self loops: graphtools K has K_ii = 1; our default keep_self_loops=False sets K_ii = 0
+   decay=40.0, k= 5: mean degree without loops = 3.76 (a self loop adds 1)
+          mu_0..7 with loops   : [1.5543e-15 2.2204e-15 2.9976e-15 3.1086e-15 5.7028e-01 5.7604e-01
+ 5.7960e-01 5.8339e-01]   k*=4
+          mu_0..7 without loops: [2.5535e-15 2.8866e-15 3.3307e-15 3.9968e-15 8.5182e-01 8.5523e-01
+ 8.6127e-01 8.6651e-01]   k*=4
+          principal-angle cosines, slow 4-mode subspace: [0.9983 0.9975 0.9969 0.9968]
+   decay= 2.0, k=10: mean degree without loops = 13.40 (a self loop adds 1)
+          mu_0..7 with loops   : [3.3307e-16 2.5925e-01 2.7009e-01 3.0124e-01 9.2538e-01 9.4056e-01
+ 9.4394e-01 9.4448e-01]   k*=4
+          mu_0..7 without loops: [6.6613e-16 2.7868e-01 2.9100e-01 3.2304e-01 9.9588e-01 1.0117e+00
+ 1.0137e+00 1.0154e+00]   k*=4
+          principal-angle cosines, slow 4-mode subspace: [1. 1. 1. 1.]
+
+D. connectivity of the PHATE-default kernel (k=5, decay=40) on this neuron graph
+   connected components: 4  (true modules: 4)
+   k=5, decay=40.0: 4 components
+   k=5, decay=10.0: 4 components
+   k=5, decay= 5.0: 4 components

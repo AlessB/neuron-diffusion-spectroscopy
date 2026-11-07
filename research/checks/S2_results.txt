@@ -1,0 +1,76 @@
+##### python3 check_li_rankme_alpha.py
+--- power-law Gaussian alpha=1.0: tokens=6000 neurons=512 (Li keeps 512 components)
+  max |eigen ratio Li - ours| over Li's 512  : 1.665e-16
+  RankMe  Li=113.166629  ours(rankme_li)=113.166629  diff=-9.948e-14
+  alpha   Li=0.9927066848  ours=0.9927066848  diff=4.096e-11
+  R2      Li fit_R2(idx 12..499)=0.98545  Li fit_R2_100(idx 12..99)=0.99969  ours(idx 11..99)=0.99971
+  log(rankme_li) - matrix_entropy(order 1) = 3.183e-04
+--- GELU neurons, 512: tokens=6000 neurons=512 (Li keeps 512 components)
+  max |eigen ratio Li - ours| over Li's 512  : 3.816e-17
+  RankMe  Li=321.224253  ours(rankme_li)=321.224253  diff=5.684e-13
+  alpha   Li=0.5307860060  ours=0.5307860060  diff=-9.105e-12
+  R2      Li fit_R2(idx 12..499)=0.75743  Li fit_R2_100(idx 12..99)=0.99935  ours(idx 11..99)=0.99939
+  log(rankme_li) - matrix_entropy(order 1) = 2.854e-04
+--- GELU neurons, 3072 (> 2048 cap): tokens=4000 neurons=3072 (Li keeps 2048 components)
+  max |eigen ratio Li - ours| over Li's 2048  : 6.245e-17
+  RankMe  Li=793.234540  ours(rankme_li)=905.691427  diff=-1.125e+02
+  alpha   Li=0.7812918339  ours=0.7812918336  diff=2.373e-10
+  R2      Li fit_R2(idx 12..499)=0.81687  Li fit_R2_100(idx 12..99)=0.99597  ours(idx 11..99)=0.99627
+  log(rankme_li) - matrix_entropy(order 1) = 2.485e-03
+--- in-place trange mutation
+  same array reused: alpha call1=1.003597  call2=1.005327  trange now starts at 13
+##### python3 check_fastssl_alpha_ranges.py
+--- power-law Gaussian alpha=1.0 (512 neurons)
+  fastssl train_model (3,100)    theirs=0.995871  ours=0.995871  diff=4.24e-11
+  fastssl per-batch (5,50)       theirs=0.997195  ours=0.997195  diff=9.24e-11
+  fastssl notebook (10,100)      theirs=0.989599  ours=0.989599  diff=9.91e-12
+  Li et al. (11,100)             theirs=0.992707  ours=0.992707  diff=4.10e-11
+  robust_fit_powerlaw(ranks 12..100, median of windows) = 0.997105
+--- GELU neurons (512)
+  fastssl train_model (3,100)    theirs=0.550293  ours=0.550293  diff=-2.78e-11
+  fastssl per-batch (5,50)       theirs=0.526222  ours=0.526222  diff=3.21e-10
+  fastssl notebook (10,100)      theirs=0.529028  ours=0.529028  diff=-2.01e-11
+  Li et al. (11,100)             theirs=0.530786  ours=0.530786  diff=-9.11e-12
+  robust_fit_powerlaw(ranks 12..100, median of windows) = 0.550304
+--- GELU neurons, steeper latent (decay 1.5)
+  fastssl train_model (3,100)    theirs=1.060893  ours=1.060893  diff=1.74e-10
+  fastssl per-batch (5,50)       theirs=1.113051  ours=1.113051  diff=3.04e-11
+  fastssl notebook (10,100)      theirs=1.038425  ours=1.038425  diff=2.07e-10
+  Li et al. (11,100)             theirs=1.029955  ours=1.029955  diff=1.67e-10
+  robust_fit_powerlaw(ranks 12..100, median of windows) = 0.986316
+##### python3 check_skean_entropy.py
+--- Skean prompt entropy (alpha=1, 'raw' normalisation), mean over 200 prompts of 64 tokens
+  Skean code (with clamp)                      : 4.078798
+  Skean without clamp                          : 3.967987
+  nds matrix_entropy, eig(H^T H), H row-normed : 3.967987  (diff to no-clamp 9.77e-15)
+  nds matrix_entropy, np.cov of row-normalised : 3.971451  (re-centred columns)
+  nds matrix_entropy, raw cov, per prompt      : 3.804986
+  nds matrix_entropy, raw cov, pooled tokens   : 5.297092
+  maxEntropy-normalised Skean (÷ min(log N, log D)) : 0.980744
+  log rankme_li(pooled) - matrix_entropy(pooled): 1.214e-04
+--- repitl alpha=2 shortcut on a trace-normalised Gram (what compute_entropy passes in)
+  eigenvalue Renyi-2 = 3.992860   frobeniusGIP Renyi-2 = 12.310626   diff = 8.317766   2 log N = 8.317766
+  ours matrix_entropy(order=2) on same eigenvalues = 3.992860
+##### python3 check_gurnee_pearson.py
+--- GELU neurons (typical scale): tokens=51200 neurons=256
+  Gurnee, faithful dtypes (fp16 acts)      max|r - r_ref| = 1.026e-02   non-finite entries = 0
+  Gurnee, fp16 acts but float64 sums       max|r - r_ref| = 1.270e-04   non-finite entries = 0
+  Gurnee formula, all float64              max|r - r_ref| = 4.961e-14   non-finite entries = 0
+  nds add_batch (float64)                  max|r - r_ref| = 4.996e-16   non-finite entries = 0
+  nds add_batch_summary (float32 batch)    max|r - r_ref| = 3.307e-08   non-finite entries = 0
+--- large mean / small spread (mean 50, std 0.05): tokens=51200 neurons=256
+  Gurnee, faithful dtypes (fp16 acts)      max|r - r_ref| = 0.000e+00   non-finite entries = 65536
+  Gurnee, fp16 acts but float64 sums       max|r - r_ref| = 1.257e-02   non-finite entries = 0
+  Gurnee formula, all float64              max|r - r_ref| = 1.549e-08   non-finite entries = 0
+  nds add_batch (float64)                  max|r - r_ref| = 6.940e-15   non-finite entries = 0
+  nds add_batch_summary (float32 batch)    max|r - r_ref| = 9.408e-06   non-finite entries = 0
+--- one neuron with |x| up to 300 (fp16 x^2 overflows above 255.9): tokens=51200 neurons=256
+  Gurnee, faithful dtypes (fp16 acts)      max|r - r_ref| = 1.026e-02   non-finite entries = 511
+  Gurnee, fp16 acts but float64 sums       max|r - r_ref| = 1.270e-04   non-finite entries = 0
+  Gurnee formula, all float64              max|r - r_ref| = 4.961e-14   non-finite entries = 0
+  nds add_batch (float64)                  max|r - r_ref| = 4.996e-16   non-finite entries = 0
+  nds add_batch_summary (float32 batch)    max|r - r_ref| = 3.307e-08   non-finite entries = 0
+--- accumulator memory
+  pythia-70m   Gurnee all-layer cross matrix   1.21 GB | nds per-layer scatter x 8 blocks x layers   1.61 GB
+  pythia-160m  Gurnee all-layer cross matrix  10.87 GB | nds per-layer scatter x 8 blocks x layers   7.25 GB
+  pythia-410m  Gurnee all-layer cross matrix  77.31 GB | nds per-layer scatter x 8 blocks x layers  25.77 GB

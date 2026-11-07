@@ -1,0 +1,31 @@
+seed 0 done
+seed 1 done
+seed 2 done
+
+== single checkpoint, stable run (mean over seeds and checkpoints) ==
+readout                            option      level  spread  jitter   original - max rotated
+module_aligned_localization        A           1.159   0.055   0.009                    2.092
+module_aligned_localization        B           1.147   0.000   0.009                    2.132
+module_aligned_localization        D           1.175   0.050   0.003                    2.075
+module_aligned_localization        original    3.279
+module_aligned_support             A           1.061   0.025   0.006                    2.053
+module_aligned_support             B           1.057   0.000   0.005                    2.070
+module_aligned_support             D           1.064   0.024   0.002                    2.051
+module_aligned_support             original    3.127
+first_ten_subspace_localization    A           1.105   0.024   0.009                   -0.013
+first_ten_subspace_localization    B           1.113   0.000   0.013                   -0.009
+first_ten_subspace_localization    D           1.080   0.021   0.003                    0.013
+first_ten_subspace_localization    original    1.104
+
+== between checkpoints (mean over seeds) ==
+stable run: change reported between neighbouring checkpoints where nothing changed
+reshuffle run: change reported at the event (checkpoint 3 -> 4)
+measure            who          stable, no event   at the event
+one_minus_ari      original                0.061          0.454
+one_minus_ari      A                       1.000          0.999
+one_minus_ari      B                       0.679          0.955
+one_minus_ari      D                       0.650          0.947
+subspace_distance  original                0.003          0.636
+subspace_distance  A                       0.856          0.859
+subspace_distance  B                       0.059          0.569
+subspace_distance  D                       0.007          0.569

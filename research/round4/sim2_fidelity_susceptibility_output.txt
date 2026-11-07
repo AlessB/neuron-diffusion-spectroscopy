@@ -1,0 +1,11 @@
+A. chi between neighbouring checkpoints (evenly spaced here, so chi is proportional to d)
+   transition index i means checkpoint i -> i+1; planted events at transition 3
+   stable      0.003  0.003  0.003  0.002  0.003  0.002  0.003   peak at 1, peak / median of the rest =     1.1
+   growing     0.697  0.066  0.023  0.013  0.008  0.005  0.003   peak at 0, peak / median of the rest =    66.9
+   forming     0.642  0.638  0.627  0.765  0.003  0.002  0.003   peak at 3, peak / median of the rest =     2.4
+   reshuffle   0.003  0.003  0.003  0.650  0.003  0.002  0.003   peak at 3, peak / median of the rest =   254.8
+
+B. avoided-crossing toy, 41 positions: slowest non-trivial mode
+   g = 0.05: min gap 0.0249 at position 0.500; chi(mode 1) peak       5.4 at position 0.512; peak x gap^2 = 0.0033; chi(modes 1-2 together) max 0.00
+   g = 0.10: min gap 0.0244 at position 0.500; chi(mode 1) peak       5.6 at position 0.512; peak x gap^2 = 0.0033; chi(modes 1-2 together) max 0.00
+   g = 0.20: min gap 0.0206 at position 0.500; chi(mode 1) peak       7.7 at position 0.488; peak x gap^2 = 0.0033; chi(modes 1-2 together) max 0.00

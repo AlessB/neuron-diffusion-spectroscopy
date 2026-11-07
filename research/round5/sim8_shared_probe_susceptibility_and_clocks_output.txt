@@ -1,0 +1,28 @@
+
+===== drift on the log clock (rate 0.02); shared probe text =====
+seed 0: d quiet median 0.00005, d at event 0.5775
+            raw d: peak at   2000->3000   event/median   10590.6, largest other/median      3.2
+     chi = d/dt^2: peak at   2000->3000   event/median    3188.9, largest other/median     33.0
+    d / paired sd: peak at   2000->3000   event/median      59.6, largest other/median      2.2
+seed 1: d quiet median 0.00005, d at event 0.6510
+            raw d: peak at   2000->3000   event/median   13045.9, largest other/median      3.4
+     chi = d/dt^2: peak at   2000->3000   event/median    3862.0, largest other/median     34.9
+    d / paired sd: peak at   2000->3000   event/median     141.0, largest other/median      1.8
+seed 2: d quiet median 0.00005, d at event 0.6003
+            raw d: peak at   2000->3000   event/median   11055.5, largest other/median      3.3
+     chi = d/dt^2: peak at   2000->3000   event/median    3187.3, largest other/median     31.2
+    d / paired sd: peak at   2000->3000   event/median      73.6, largest other/median      2.3
+
+===== drift on the step clock (rate 2.0); shared probe text =====
+seed 0: d quiet median 0.00040, d at event 0.5767
+            raw d: peak at   2000->3000   event/median    1456.7, largest other/median     10.3
+     chi = d/dt^2: peak at 142000->143000 event/median     167.2, largest other/median    388.6
+    d / paired sd: peak at   2000->3000   event/median      62.1, largest other/median      2.2
+seed 1: d quiet median 0.00038, d at event 0.6510
+            raw d: peak at   2000->3000   event/median    1710.8, largest other/median     11.0
+     chi = d/dt^2: peak at 141000->142000 event/median     187.6, largest other/median    399.5
+    d / paired sd: peak at   2000->3000   event/median     152.9, largest other/median      1.7
+seed 2: d quiet median 0.00040, d at event 0.6000
+            raw d: peak at   2000->3000   event/median    1501.1, largest other/median     10.7
+     chi = d/dt^2: peak at 142000->143000 event/median     151.0, largest other/median    335.4
+    d / paired sd: peak at   2000->3000   event/median      70.5, largest other/median      2.3

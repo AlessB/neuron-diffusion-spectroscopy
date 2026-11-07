@@ -1,0 +1,10 @@
+# Reference only (PLAN P2.2): graphtools exactly as shipped (knn 5, decay 40, threshold 1e-4, self loops),
+# shown once to document what the default does to cross-module weights.
+run_name: pythia70m-deduped_week1_graphtools
+source_run: pythia70m-deduped_week1
+analysis:
+  kernel_type: alpha_decay
+  neighbour_rank: 5
+  decay: 40.0
+  threshold: 1.0e-4
+  keep_self_loops: true

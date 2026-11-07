@@ -1,0 +1,11 @@
+structural drift rate 0.02 rad/checkpoint (scaled by a per-neuron speed in [0,1]), no event
+ lag |        d |      d_cv
+   1 |  0.00024 |  0.000069
+   2 |  0.00064 |  0.000286
+   3 |  0.00118 |  0.000661
+   4 |  0.00188 |  0.001177
+   5 |  0.00272 |  0.001849
+moved 0 seed 0: d event 0.00026 quiet median 0.00025 | d_cv event 0.00008 quiet median 0.000074 quiet max 0.000111
+moved 0 seed 1: d event 0.00027 quiet median 0.00026 | d_cv event 0.00010 quiet median 0.000079 quiet max 0.000107
+moved 1 seed 0: d event 0.01003 quiet median 0.00025 | d_cv event 0.00969 quiet median 0.000072 quiet max 0.000085
+moved 1 seed 1: d event 0.01012 quiet median 0.00025 | d_cv event 0.00977 quiet median 0.000074 quiet max 0.000101

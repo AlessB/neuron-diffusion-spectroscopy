@@ -1,0 +1,13 @@
+# The alpha-decay kernel beside the primary on every key figure (DECISIONS D32), no threshold.
+# k = 10, not graphtools' default 5: at k = 5 every weight between modules underflows to exactly 0
+# (method notes 3b), which would erase the couplings the avoided-crossing fits need. (Open: D40.)
+run_name: pythia70m-deduped_week1_alpha_decay
+source_run: pythia70m-deduped_week1
+analysis:
+  kernel_type: alpha_decay
+  neighbour_rank: 10
+  decay: 40.0
+  threshold: 0.0
+  keep_self_loops: true
+  number_of_rotations: 5
+  number_of_null_draws: 1

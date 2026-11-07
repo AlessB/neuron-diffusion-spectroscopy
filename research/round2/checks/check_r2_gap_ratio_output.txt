@@ -1,0 +1,50 @@
+== references ==
+Poisson (sorted uniforms)      <r> = 0.3884   (theory 0.3863)
+GOE 2048                       <r> = 0.5224   (Atas 0.5307)
+superposition of  2 independent GOE blocks <r> = 0.4103
+superposition of  8 independent GOE blocks <r> = 0.3929
+superposition of 32 independent GOE blocks <r> = 0.3849
+spread of <r> over 20 GOE(1024) draws: mean 0.5306 sd 0.0123
+spread of <r> over 200 GOE(52) draws (50 ratios, like r_slow50): mean 0.5319 sd 0.0438
+
+== neuron graphs: 2048 neurons, 20000 tokens, self-tuning kernel k=10 ==
+no modules (pure noise)
+   original : r_all 0.521 | r_bulk 0.528 | r_slow50 0.538 | N*IPR/3 slow 1.03 bulk 1.00 | r_cov 0.537
+   rotated 0: r_all 0.536 | r_bulk 0.533 | r_slow50 0.590 | N*IPR/3 slow 1.01 bulk 1.00 | r_cov 0.537
+   rotated 1: r_all 0.530 | r_bulk 0.524 | r_slow50 0.503 | N*IPR/3 slow 0.98 bulk 1.00 | r_cov 0.537
+   slow mu (orig) first 5: [1.0001]  | elapsed 18s
+8 modules x 64, strength 0.7, rest noise
+   original : r_all 0.530 | r_bulk 0.541 | r_slow50 0.548 | N*IPR/3 slow 4.82 bulk 1.29 | r_cov 0.524
+   rotated 0: r_all 0.534 | r_bulk 0.538 | r_slow50 0.558 | N*IPR/3 slow 0.93 bulk 1.02 | r_cov 0.524
+   rotated 1: r_all 0.534 | r_bulk 0.539 | r_slow50 0.504 | N*IPR/3 slow 0.93 bulk 1.02 | r_cov 0.524
+   slow mu (orig) first 5: [0.9183 0.9208 0.9216 0.9236 0.9248]  | elapsed 33s
+32 modules x 64 (every neuron), strength 0.7
+   original : r_all 0.527 | r_bulk 0.532 | r_slow50 0.498 | N*IPR/3 slow 5.58 bulk 22.38 | r_cov 0.530
+   rotated 0: r_all 0.540 | r_bulk 0.540 | r_slow50 0.581 | N*IPR/3 slow 0.96 bulk 1.73 | r_cov 0.530
+   rotated 1: r_all 0.530 | r_bulk 0.535 | r_slow50 0.491 | N*IPR/3 slow 0.95 bulk 1.79 | r_cov 0.530
+   slow mu (orig) first 5: [0.693  0.7031 0.7047 0.7069 0.7095]  | elapsed 47s
+32 modules x 64, strength 0.2
+   original : r_all 0.524 | r_bulk 0.534 | r_slow50 0.447 | N*IPR/3 slow 1.76 bulk 1.01 | r_cov 0.517
+   rotated 0: r_all 0.548 | r_bulk 0.538 | r_slow50 0.592 | N*IPR/3 slow 0.97 bulk 1.00 | r_cov 0.517
+   rotated 1: r_all 0.524 | r_bulk 0.527 | r_slow50 0.509 | N*IPR/3 slow 0.98 bulk 1.01 | r_cov 0.517
+   slow mu (orig) first 5: [0.9902 0.9902 0.9904 0.9905 0.9905]  | elapsed 75s
+32 modules x 64, strength 0.7, GELU
+   original : r_all 0.529 | r_bulk 0.523 | r_slow50 0.512 | N*IPR/3 slow 4.02 bulk 5.48 | r_cov 0.539
+   rotated 0: r_all 0.524 | r_bulk 0.534 | r_slow50 0.480 | N*IPR/3 slow 0.95 bulk 1.34 | r_cov 0.539
+   rotated 1: r_all 0.537 | r_bulk 0.546 | r_slow50 0.470 | N*IPR/3 slow 0.94 bulk 1.36 | r_cov 0.539
+   slow mu (orig) first 5: [0.8378 0.8404 0.8412 0.8429 0.8453]  | elapsed 92s
+
+== module strength sweep (32 modules x 64): does <r> move as modules form? ==
+strength 0.00: orig r_all 0.540 r_bulk 0.547 slow N*IPR/3 1.00 || rotated r_all 0.538 r_bulk 0.534 slow N*IPR/3 0.99
+strength 0.05: orig r_all 0.535 r_bulk 0.527 slow N*IPR/3 1.80 || rotated r_all 0.533 r_bulk 0.537 slow N*IPR/3 0.99
+strength 0.10: orig r_all 0.527 r_bulk 0.530 slow N*IPR/3 1.92 || rotated r_all 0.526 r_bulk 0.519 slow N*IPR/3 0.99
+strength 0.20: orig r_all 0.518 r_bulk 0.512 slow N*IPR/3 1.86 || rotated r_all 0.527 r_bulk 0.530 slow N*IPR/3 0.97
+strength 0.40: orig r_all 0.521 r_bulk 0.536 slow N*IPR/3 3.08 || rotated r_all 0.535 r_bulk 0.538 slow N*IPR/3 0.97
+strength 0.70: orig r_all 0.523 r_bulk 0.535 slow N*IPR/3 4.45 || rotated r_all 0.535 r_bulk 0.531 slow N*IPR/3 0.95
+
+== finite-size scaling: subsample N neurons (modules of 64 kept whole), IPR of slow modes ==
+N  256: slow-mode IPR orig 0.0078 (1/64 = 0.0156) rotated 0.00872 (3/N = 0.01172) | r_all orig 0.452 rot 0.492
+N  512: slow-mode IPR orig 0.0076 (1/64 = 0.0156) rotated 0.00504 (3/N = 0.00586) | r_all orig 0.509 rot 0.525
+N 1024: slow-mode IPR orig 0.0078 (1/64 = 0.0156) rotated 0.00268 (3/N = 0.00293) | r_all orig 0.518 rot 0.515
+N 2048: slow-mode IPR orig 0.0070 (1/64 = 0.0156) rotated 0.00139 (3/N = 0.00146) | r_all orig 0.528 rot 0.536
+total 168s

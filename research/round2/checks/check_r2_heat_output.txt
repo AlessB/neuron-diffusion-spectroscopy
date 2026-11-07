@@ -1,0 +1,13 @@
+== specific heat C(tau) at module strength 0.5 (1024 neurons, 16 modules x 64) ==
+orig        : local maxima of C: tau 7.1: C 12.45 | C(tau=1000) 0.00
+              slow mu 1..16: [0.888 0.889 0.89  0.89  0.891 0.891 0.892 0.893 0.894 0.894 0.895 0.896
+ 0.896 0.897 0.898 1.001]
+rot same Q  : local maxima of C: tau 7.1: C 12.47 | C(tau=1000) 0.00
+              slow mu 1..16: [0.957 0.957 0.957 0.957 0.958 0.958 0.958 0.959 0.959 0.96  0.96  0.96
+ 0.961 0.961 0.962 0.962]
+
+== graph diffusion distance between strength 0.3 and 0.5 (same neurons) ==
+orig        : GDD 0.115 at t 1.0
+rot same Q  : GDD 0.031 at t 1.0
+rot fresh Q : GDD 0.073 at t 1.0
+noise ref   : GDD 0.086 at t 39.8  (strength 0.5 vs a fresh draw of the same modules: same structure, new tokens; the size of pure sampling noise)

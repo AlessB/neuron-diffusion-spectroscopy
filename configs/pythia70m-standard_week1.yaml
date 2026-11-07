@@ -1,0 +1,51 @@
+# First real run, standard Pythia-70M, 25 checkpoints (P1.2, GPU 0)
+# Every setting that affects results is here, so the run can be repeated exactly.
+# DECISIONS: models D27, probe D29, position 0 D30, storage D31, controls D36, kernels D32.
+
+run_name: pythia70m-standard_week1
+model_name: pythia-70m
+
+# "week_one" = 25 checkpoints (nds.checkpoints.week_one_steps); "all" = all 154; or a list
+steps: week_one
+
+probe:
+  tokens: probes/probe_tokens_pile-val_1024x256.npy      # D29: 1,024 documents x 256 tokens
+  manifest: probes/probe_tokens_pile-val_1024x256.json
+
+induction:
+  number_of_sequences: 64
+  repeat_length: 128
+  seed: 0
+  known_onset_step: null   # fill in once measured, so figures can mark it
+
+collection:
+  device: cuda
+  dtype: float32            # FP32 on every machine (D23)
+  batch_size: 16            # lower to 8 or 4 on a 6 GB card if it runs out of memory
+  number_of_blocks: 8       # token bootstrap blocks (D48: 8 saved blocks for week 1)
+  save_block_moments: true  # D48: every block kept (about 800 MB per checkpoint) for more replicates later and the paired bootstrap (D50, open)
+  skip_first_positions: 1   # rows start with <|endoftext|>; position 0 is context only (D30)
+  prompt_entropy: true      # Skean et al. 2025 baseline (D38)
+  token_sample_size: 2048   # fixed token sample, same positions at every checkpoint (D31)
+  token_sample_seed: 0
+  layers: null              # null = all layers in one pass (D39)
+  save_covariance: true
+  weight_statistics: true   # Gurnee vocabulary moments and WeightWatcher alpha of W_in, W_out (seconds)
+  delete_checkpoint_after: false
+  cache_dir: null           # null = use HF_HOME (keep it on the machine's own disk)
+
+# anything not given uses nds.analysis.DEFAULT_SETTINGS
+analysis:
+  neighbour_rank: 10
+  kernel_type: self_tuning   # primary kernel (D32); alpha-decay runs via configs/robustness_*.yaml
+  decay: 40.0
+  threshold: 0.0
+  anisotropy: 0.0
+  signed: true
+  keep_self_loops: false
+  number_of_rotations: 5     # D36
+  number_of_null_draws: 1    # D36: independent neurons at the measured noise level
+  number_of_bootstrap_replicates: 5
+  diffusion_times: [1, 2, 4, 8, 16, 32, 64]
+  fixed_bandwidth_dse: true
+  random_seed: 0

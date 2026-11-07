@@ -1,0 +1,18 @@
+
+===== seed 0 =====
+quiet transitions: plain d median 0.00004 (max 0.00013); d_cv median -0.000001 (min -0.000010, max 0.000008)
+   two splits disagree on d_cv by (median |difference|) 0.000001
+   quiet d_cv early (steps < 1,000) median -0.000001; late (> 50,000) median -0.000000
+   quiet d_cv / dt^2: early median -0.0000, late median -0.0004
+   event A (1 neuron)       2000->3000: plain 0.00999, d_cv 0.00954 (second split 0.00954), d_cv / largest quiet d_cv 1253.6, k used 8, top neuron by c_i: 0
+   event B (birth, k 8->9)  20000->30000: plain 0.06862, d_cv 0.05281 (second split 0.05375), d_cv / largest quiet d_cv 6938.7, k used 9, top neuron by c_i: 203
+   event C (5% late)        141000->142000: plain 0.07770, d_cv 0.07456 (second split 0.07433), d_cv / largest quiet d_cv 9796.8, k used 9, top neuron by c_i: 23
+
+===== seed 1 =====
+quiet transitions: plain d median 0.00004 (max 0.00013); d_cv median 0.000000 (min -0.000009, max 0.000011)
+   two splits disagree on d_cv by (median |difference|) 0.000001
+   quiet d_cv early (steps < 1,000) median 0.000002; late (> 50,000) median 0.000000
+   quiet d_cv / dt^2: early median 0.0000, late median 0.0002
+   event A (1 neuron)       2000->3000: plain 0.01017, d_cv 0.00976 (second split 0.00977), d_cv / largest quiet d_cv 928.4, k used 8, top neuron by c_i: 0
+   event B (birth, k 8->9)  20000->30000: plain 0.06790, d_cv 0.05529 (second split 0.05332), d_cv / largest quiet d_cv 5262.6, k used 9, top neuron by c_i: 195
+   event C (5% late)        141000->142000: plain 0.07797, d_cv 0.07435 (second split 0.07451), d_cv / largest quiet d_cv 7076.3, k used 9, top neuron by c_i: 154

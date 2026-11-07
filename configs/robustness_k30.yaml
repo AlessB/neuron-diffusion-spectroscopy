@@ -1,0 +1,6 @@
+# Robustness re-analysis (PLAN P2): same saved covariances, different kernel settings.
+# Used by scripts/reanalyse.py, which reads runs/<source_run>/ and writes runs/<run_name>/.
+run_name: pythia70m-deduped_week1_k30
+source_run: pythia70m-deduped_week1
+analysis:
+  neighbour_rank: 30

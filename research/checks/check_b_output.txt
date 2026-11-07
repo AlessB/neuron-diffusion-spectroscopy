@@ -1,0 +1,18 @@
+p =   100 probe inputs, 30 slices x 64 units, PCA to 100 dims applied: False
+   max |K_ours - K_reimpl|           = 9.25e-05
+   max |K_ours - K_mphate block|     = 9.25e-05
+   max |K_reimpl - K_mphate block|   = 7.72e-15
+   interslice: bandwidth eps = 14.823 (= 1.482 sqrt(p));  max |reimpl - m_phate| = 0.00e+00
+   diagonal of the full multislice K: min 1.000, max 1.000
+p =  2000 probe inputs, 30 slices x 64 units, PCA to 100 dims applied: True
+   max |K_ours - K_reimpl|           = 9.01e-05
+   max |K_ours - K_mphate block|     = 4.29e-01
+   max |K_reimpl - K_mphate block|   = 4.29e-01
+   interslice: bandwidth eps = 63.933 (= 1.430 sqrt(p));  max |reimpl - m_phate| = 5.11e-01
+   diagonal of the full multislice K: min 1.000, max 1.000
+p =  2000 probe inputs, 30 slices x 64 units, PCA to None dims applied: False
+   max |K_ours - K_reimpl|           = 9.01e-05
+   max |K_ours - K_mphate block|     = 9.01e-05
+   max |K_reimpl - K_mphate block|   = 6.72e-15
+   interslice: bandwidth eps = 63.933 (= 1.430 sqrt(p));  max |reimpl - m_phate| = 0.00e+00
+   diagonal of the full multislice K: min 1.000, max 1.000

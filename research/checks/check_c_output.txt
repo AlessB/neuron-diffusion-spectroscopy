@@ -1,0 +1,17 @@
+(1) fixed-bandwidth kernel, ours vs dse_dsmi (sigma = sqrt(p) * b)
+   t= 1: ours 2.5415423614  dse_dsmi 2.5415423614  diff 8.9e-16
+   t= 2: ours 0.2269588158  dse_dsmi 0.2269588158  diff 1.7e-16
+   t= 4: ours 0.0037690606  dse_dsmi 0.0037690606  diff 3.2e-16
+   t= 8: ours 0.0000006215  dse_dsmi 0.0000006215  diff 2.1e-22
+   dse_dsmi with its default sigma=10 on the same z-scored vectors: 6.9968 (t=1)
+
+(2) adaptive kernel (k=10, decay=2): our DSE (|eig|, log2) vs PHATE VNE (singular values, ln)
+   max |sigma_i - |lambda_i||, sorted: 2.060e-04
+   t= 1: DSE 5.4542 bits = 3.7806 nats | PHATE vne[t-1] 3.7805 nats
+   t= 2: DSE 2.2780 bits = 1.5790 nats | PHATE vne[t-1] 1.5789 nats
+   t= 4: DSE 1.6509 bits = 1.1443 nats | PHATE vne[t-1] 1.1441 nats
+   t= 8: DSE 0.8569 bits = 0.5940 nats | PHATE vne[t-1] 0.5936 nats
+   t=16: DSE 0.1057 bits = 0.0733 nats | PHATE vne[t-1] 0.0731 nats
+   t=32: DSE 0.0008 bits = 0.0006 nats | PHATE vne[t-1] 0.0006 nats
+   t=64: DSE 0.0000 bits = 0.0000 nats | PHATE vne[t-1] 0.0000 nats
+   PHATE knee on x = arange(t_max) -> t_opt = 13, but that entry was computed from sigma^14

@@ -1,0 +1,11 @@
+case                                         k*  subspace orig/rot       IPR orig/rot        L1 orig/rot
+no structure                                  3     1.17 /  1.20       0.97 /  1.12       1.00 /  1.03  
+2 large modules, all neurons (2 x 256)        2     1.27 /  1.79       0.67 /  0.79       1.14 /  0.95 *
+4 modules, all neurons (4 x 128)              4     1.28 /  1.52       1.38 /  0.95 *     2.10 /  1.01 *
+8 modules, all neurons (8 x 64)               8     1.15 /  1.26       2.82 /  1.09 *     3.98 /  1.04 *
+4 x 32 modules + 384 free neurons             4     1.32 /  1.13       3.14 /  1.00 *     1.31 /  1.01 *
+8 x 16 modules + 384 free neurons             8     2.76 /  1.14 *     8.47 /  1.16 *     2.38 /  1.04 *
+2 x 100 modules + 312 free neurons            3     1.18 /  1.32       1.41 /  0.89 *     2.31 /  0.97 *
+  return fun(*args, **kwargs)
+8 x 64, weak (strength 0.2)                   8     1.08 /  1.13       2.85 /  1.17 *     3.73 /  1.05 *
+* = original above 1.2 x the largest rotated value

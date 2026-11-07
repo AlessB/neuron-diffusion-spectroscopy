@@ -1,0 +1,47 @@
+# First real run (PLAN P1): Pythia-70M-deduped, 25 checkpoints, all 6 layers.
+# Every setting that affects results is here, so the run can be repeated exactly.
+
+run_name: pythia70m-deduped_week1
+model_name: pythia-70m-deduped
+
+# "week_one" = 25 checkpoints (nds.checkpoints.week_one_steps); "all" = all 154; or a list
+steps: week_one
+
+probe:
+  tokens: probes/probe_tokens_pile-val_200x256.npy
+  manifest: probes/probe_tokens_pile-val_200x256.json
+
+induction:
+  number_of_sequences: 64
+  repeat_length: 128
+  seed: 0
+  # Olsson et al. 2022 / Tigges et al. 2024: induction heads form around 1-2 billion tokens.
+  # Fill in the step we actually measure here, so figures can mark it.
+  known_onset_step: null
+
+collection:
+  device: cuda
+  dtype: float32          # Pascal GPUs: FP32 only (DECISIONS D11)
+  batch_size: 16
+  number_of_blocks: 8     # token bootstrap blocks (D9)
+  skip_first_positions: 1 # rows start with <|endoftext|>; leave it out of the statistics (proposed D17)
+  prompt_entropy: true    # Skean et al. 2025 baseline, needs per-prompt activations (proposed D18)
+  layers: null            # null = all layers; a list such as [0, 1, 2] limits memory on big models
+  save_covariance: true
+  delete_checkpoint_after: false
+  cache_dir: null         # null = use HF_HOME
+
+# anything not given uses nds.analysis.DEFAULT_SETTINGS (see DECISIONS D5, D8, D9)
+analysis:
+  neighbour_rank: 10
+  kernel_type: self_tuning   # Zelnik-Manor & Perona; "alpha_decay" = graphtools/PHATE kernel
+  decay: 40.0                # used only by alpha_decay
+  threshold: 0.0
+  anisotropy: 0.0            # Coifman-Lafon alpha
+  signed: true
+  keep_self_loops: false
+  number_of_rotations: 1
+  number_of_bootstrap_replicates: 5
+  diffusion_times: [1, 2, 4, 8, 16, 32, 64]
+  fixed_bandwidth_dse: true
+  random_seed: 0

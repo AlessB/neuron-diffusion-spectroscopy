@@ -1,0 +1,19 @@
+# outputs and model files never go in git
+runs/
+*.npz
+*.safetensors
+*.bin
+hf_cache/
+
+# python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# notebooks: outputs are stripped by nbstripout (see docs/gpu-runbook.md)
+.ipynb_checkpoints/
+
+# planning, decisions and conversation records stay private (D70)
+plan-docs/

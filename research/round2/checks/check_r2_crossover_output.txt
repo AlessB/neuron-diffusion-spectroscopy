@@ -1,0 +1,41 @@
+== A. cross-module weights x eps (32 modules x 64, strength 0.7, self-tuning k=10) ==
+mean kernel weight inside modules 3.187e-01, between modules 2.580e-02; total between / total inside = 2.55
+eps  1.0000: r_all 0.529 r_bulk 0.528 | slow N*IPR/3 4.61 | bulk median N*IPR/3 16.79
+eps  0.3000: r_all 0.506 r_bulk 0.513 | slow N*IPR/3 5.02 | bulk median N*IPR/3 30.34
+eps  0.1000: r_all 0.487 r_bulk 0.500 | slow N*IPR/3 5.04 | bulk median N*IPR/3 31.34
+eps  0.0300: r_all 0.441 r_bulk 0.438 | slow N*IPR/3 5.47 | bulk median N*IPR/3 32.51
+eps  0.0100: r_all 0.410 r_bulk 0.414 | slow N*IPR/3 5.89 | bulk median N*IPR/3 34.42
+eps  0.0010: r_all 0.398 r_bulk 0.392 | slow N*IPR/3 5.92 | bulk median N*IPR/3 35.37
+eps  0.0001: r_all 0.393 r_bulk 0.397 | slow N*IPR/3 5.92 | bulk median N*IPR/3 35.41
+eps  0.0000: r_all 0.390 r_bulk 0.390 | slow N*IPR/3 10.95 | bulk median N*IPR/3 35.38
+
+== B. sparse kernels, original vs rotated ==
+self-tuning k=10 (dense)             orig: r_all 0.529 r_bulk 0.528 | slow N*IPR/3 4.61 | cross-module weights exactly 0: 0.000 | comps 1
+self-tuning k=10 (dense)             rot : r_all 0.535 r_bulk 0.535 | slow N*IPR/3 0.94 | cross-module weights exactly 0: 0.000 | comps 1
+alpha-decay k=5 d=40 + self loops    orig: 32 connected components -> skipped spectrum (cross-module weights exactly 0: 1.000)
+alpha-decay k=5 d=40 + self loops    rot : r_all 0.534 r_bulk 0.538 | slow N*IPR/3 1.13 | cross-module weights exactly 0: 0.686 | comps 1
+alpha-decay k=10 d=40 + self loops   orig: 32 connected components -> skipped spectrum (cross-module weights exactly 0: 1.000)
+alpha-decay k=10 d=40 + self loops   rot : r_all 0.534 r_bulk 0.539 | slow N*IPR/3 1.02 | cross-module weights exactly 0: 0.583 | comps 1
+kNN-10 sparsified self-tuning        orig: 32 components -> skipped
+kNN-10 sparsified self-tuning        rot : r_all 0.518 r_bulk 0.525 | slow N*IPR/3 1.03 | comps 1
+
+== C. IPR along the spectrum (median N*IPR/3 per eighth of the sorted modes) ==
+orig: [0.699-1.003]  8.74 [1.003-1.004]  8.93 [1.004-1.004] 12.84 [1.004-1.005] 14.33 [1.005-1.005] 18.43 [1.005-1.006] 27.45 [1.006-1.007] 34.93 [1.007-1.008] 69.84
+rot : [0.966-1.000]  1.00 [1.000-1.001]  1.02 [1.001-1.001]  1.84 [1.001-1.001]  1.28 [1.001-1.001]  1.13 [1.001-1.001]  1.14 [1.001-1.001]  1.25 [1.001-1.001]  1.85
+
+== D. random neuron subsampling (modules shrink with N) ==
+N  512: slow-mode IPR orig 0.03597 (N*IPR/3 6.14) | rotated 0.00558 (N*IPR/3 0.95)
+N 1024: slow-mode IPR orig 0.01489 (N*IPR/3 5.08) | rotated 0.00280 (N*IPR/3 0.96)
+N 2048: slow-mode IPR orig 0.00675 (N*IPR/3 4.61) | rotated 0.00139 (N*IPR/3 0.95)
+
+== E. toy multislice supra-graph: 12 slices x 120 neurons (avoided-crossing toy) ==
+interslice bandwidth 4.97; slowest supra mu: [0.     0.0124 0.0422 0.074  0.1001 0.1194]
+supra mode 1: weight per module A,B,C [0.33 0.34 0.33] | weight first/last third of slices 0.47/0.47 | slice-sum sign early vs late differs: True
+supra mode 2: weight per module A,B,C [0.32 0.36 0.32] | weight first/last third of slices 0.28/0.28 | slice-sum sign early vs late differs: False
+supra mode 3: weight per module A,B,C [0.31 0.38 0.31] | weight first/last third of slices 0.36/0.37 | slice-sum sign early vs late differs: True
+supra mode 4: weight per module A,B,C [0.3  0.39 0.31] | weight first/last third of slices 0.40/0.40 | slice-sum sign early vs late differs: False
+
+memory, sparse CSR at 12 bytes per stored weight:
+   25 checkpoints: 51,200 nodes | dense supra matrix 21 GB | intraslice dense 1.3 GB, kNN-10 12 MB | interslice all-pairs 15 MB
+  154 checkpoints: 315,392 nodes | dense supra matrix 796 GB | intraslice dense 7.8 GB, kNN-10 76 MB | interslice all-pairs 579 MB
+total 80s

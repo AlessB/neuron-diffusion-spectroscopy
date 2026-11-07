@@ -1,0 +1,3 @@
+float32, centred per batch (the code) : largest correlation error 3.16e-05 (always-on neurons 3.16e-05, massive 2.82e-05); non-finite entries 0
+float32, not centred                  : largest correlation error 1.90e+00 (always-on neurons 1.90e+00, massive 2.03e-03); non-finite entries 3036
+module-aligned localisation: float64 2.653686, float32 centred 2.653687

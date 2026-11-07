@@ -1,0 +1,48 @@
+
+===== stable =====
+seed 0 module_aligned_local orig/max-of-19: 3.33/1.22+ 3.33/1.22+ 3.33/1.23+ 3.33/1.23+ 3.33/1.22+ 3.33/1.23+ 3.33/1.22+ 3.33/1.22+
+seed 0 module_aligned_suppo orig/max-of-19: 3.11/1.09+ 3.10/1.10+ 3.10/1.10+ 3.10/1.09+ 3.10/1.10+ 3.11/1.10+ 3.11/1.10+ 3.10/1.11+
+seed 0 one_minus_ari      largest strength anywhere (false-event score): original    0.00; worlds median   1.15, max   1.27; original beats 0/19
+seed 0 subspace_distance  largest strength anywhere (false-event score): original    1.08; worlds median   1.09, max   1.11; original beats 3/19
+seed 0 lineage_loss       largest strength anywhere (false-event score): original    1.12; worlds median   2.74, max  20.51; original beats 0/19
+seed 1 module_aligned_local orig/max-of-19: 3.33/1.24+ 3.32/1.24+ 3.33/1.24+ 3.33/1.24+ 3.33/1.23+ 3.32/1.22+ 3.33/1.23+ 3.32/1.23+
+seed 1 module_aligned_suppo orig/max-of-19: 3.16/1.09+ 3.16/1.09+ 3.16/1.10+ 3.17/1.09+ 3.16/1.09+ 3.16/1.09+ 3.16/1.09+ 3.16/1.09+
+seed 1 one_minus_ari      largest strength anywhere (false-event score): original    0.00; worlds median   1.11, max   1.24; original beats 0/19
+seed 1 subspace_distance  largest strength anywhere (false-event score): original    1.06; worlds median   1.05, max   1.08; original beats 14/19
+seed 1 lineage_loss       largest strength anywhere (false-event score): original    1.09; worlds median   2.87, max  31.24; original beats 0/19
+
+===== reshuffle =====
+seed 0 module_aligned_local orig/max-of-19: 3.33/1.22+ 3.33/1.22+ 3.33/1.23+ 3.33/1.23+ 3.32/1.25+ 3.32/1.25+ 3.32/1.25+ 3.32/1.26+
+seed 0 module_aligned_suppo orig/max-of-19: 3.11/1.09+ 3.10/1.10+ 3.10/1.10+ 3.10/1.09+ 3.10/1.10+ 3.10/1.09+ 3.10/1.10+ 3.10/1.09+
+seed 0 one_minus_ari      strength at the event: original 421340020.03; worlds median   1.46, max   1.59; original beats 19/19
+         raw change at event: original 0.421, worlds median 0.957
+seed 0 subspace_distance  strength at the event: original  244.05; worlds median  79.90, max  82.42; original beats 19/19
+         raw change at event: original 0.628, worlds median 0.562
+seed 0 lineage_loss       strength at the event: original  324.33; worlds median   9.22, max  50.59; original beats 19/19
+         raw change at event: original 0.554, worlds median 0.690
+seed 1 module_aligned_local orig/max-of-19: 3.33/1.24+ 3.32/1.24+ 3.33/1.24+ 3.33/1.24+ 3.32/1.21+ 3.32/1.21+ 3.32/1.21+ 3.32/1.21+
+seed 1 module_aligned_suppo orig/max-of-19: 3.16/1.09+ 3.16/1.09+ 3.16/1.10+ 3.17/1.09+ 3.16/1.09+ 3.15/1.08+ 3.16/1.09+ 3.16/1.09+
+seed 1 one_minus_ari      strength at the event: original 409157570.11; worlds median   1.37, max   1.49; original beats 19/19
+         raw change at event: original 0.409, worlds median 0.938
+seed 1 subspace_distance  strength at the event: original  231.61; worlds median  76.86, max  79.89; original beats 19/19
+         raw change at event: original 0.588, worlds median 0.529
+seed 1 lineage_loss       strength at the event: original  349.68; worlds median   7.57, max  56.19; original beats 19/19
+         raw change at event: original 0.625, worlds median 0.670
+
+===== forming =====
+seed 0 module_aligned_local orig/max-of-19: 1.13/1.21- 0.80/0.87- 0.80/0.86- 1.11/1.31- 3.33/1.22+ 3.33/1.23+ 3.33/1.22+ 3.33/1.22+
+seed 0 module_aligned_suppo orig/max-of-19: 1.06/1.07- 0.93/0.95- 0.94/0.95- 1.03/1.08- 3.10/1.10+ 3.11/1.10+ 3.11/1.10+ 3.10/1.11+
+seed 0 one_minus_ari      strength at the event: original    2.00; worlds median   1.18, max   1.24; original beats 19/19
+         raw change at event: original 1.000, worlds median 1.003
+seed 0 subspace_distance  strength at the event: original    3.16; worlds median   2.92, max   3.55; original beats 16/19
+         raw change at event: original 0.771, worlds median 0.718
+seed 0 lineage_loss       strength at the event: original    3.41; worlds median   2.51, max   3.71; original beats 18/19
+         raw change at event: original 0.807, worlds median 0.870
+seed 1 module_aligned_local orig/max-of-19: 0.87/0.89- 0.86/1.73- 0.82/1.36- 0.99/1.37- 3.33/1.23+ 3.32/1.22+ 3.33/1.23+ 3.32/1.23+
+seed 1 module_aligned_suppo orig/max-of-19: 0.93/0.95- 0.94/1.14- 0.93/1.10- 0.99/1.07- 3.16/1.09+ 3.16/1.09+ 3.16/1.09+ 3.16/1.09+
+seed 1 one_minus_ari      strength at the event: original    2.03; worlds median   1.18, max   1.22; original beats 19/19
+         raw change at event: original 1.007, worlds median 1.000
+seed 1 subspace_distance  strength at the event: original    2.68; worlds median   2.65, max   3.38; original beats 10/19
+         raw change at event: original 0.654, worlds median 0.654
+seed 1 lineage_loss       strength at the event: original    3.10; worlds median   2.00, max   3.88; original beats 14/19
+         raw change at event: original 0.803, worlds median 0.864

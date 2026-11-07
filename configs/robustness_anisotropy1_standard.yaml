@@ -1,0 +1,10 @@
+# Degree check (research2/R3, Hata & Nakao 2017): same saved covariances, Coifman-Lafon density
+# normalisation alpha = 1 (graphs.apply_anisotropy), which divides out each neuron's degree before
+# the diffusion operator is built. If slow-mode localisation survives this, it is not just neurons
+# of unusual degree. scripts/reanalyse.py reads <runs>/<source_run>/ and writes <runs>/<run_name>/.
+run_name: pythia70m-standard_week1_anisotropy1
+source_run: pythia70m-standard_week1
+analysis:
+  anisotropy: 1.0
+  number_of_rotations: 5
+  number_of_null_draws: 1
