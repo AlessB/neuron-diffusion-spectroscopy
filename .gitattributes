@@ -1,3 +1,4 @@
 # several agents append to these; keep both sides instead of stopping on a conflict
 LOG.md merge=union
 DECISIONS.md merge=union
+* text=auto eol=lf
