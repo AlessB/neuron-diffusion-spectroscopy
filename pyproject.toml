@@ -15,8 +15,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-# PyTorch is NOT listed here on purpose: on AB's Fedora machine it must come from the cu126 index
-# (see docs/gpu-runbook.md). Install it first, then `pip install -e ".[model]"`.
+# PyTorch is NOT listed here on purpose: install it first, from the PyTorch index that matches
+# your GPU (a GTX 10-series card needs the cu126 build; newer CUDA builds dropped it), then
+# `pip install -e ".[model]"`.
 model = [
     "transformers>=4.40",
     "datasets>=2.18",
