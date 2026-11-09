@@ -131,13 +131,19 @@ def main():
             token_positions=token_positions,
         )
 
+        print(f"step {step}: probe text collected in {collected['elapsed_seconds']:.0f} s", flush=True)
+
+        induction_start = time.time()
         induction = induction_scores(model, induction_sequences)
 
         # weight statistics need the model; Gurnee et al.'s vocabulary moments of cos(W_U, w_out)
         vocabulary_moments = {}
         weight_alphas = {}
         if config["collection"].get("weight_statistics", True):
-            unembedding = model.embed_out.weight.detach().float().cpu().numpy()
+            # get_output_embeddings() is the unembedding W_U in every transformers version;
+            # the attribute name changed (embed_out in version 4; not present in 5.22.2, smoke test 8 Nov).
+            output_embedding_layer = model.get_output_embeddings()
+            unembedding = output_embedding_layer.weight.detach().float().cpu().numpy()
             for layer in collected["moments"].keys():
                 output_weights = model.gpt_neox.layers[layer].mlp.dense_4h_to_h.weight.detach().float().cpu().numpy()
                 vocabulary_moments[layer] = vocabulary_alignment_moments(unembedding, output_weights)
@@ -153,6 +159,8 @@ def main():
                     "htsr_ks_w_out": distance_out,
                 }
 
+        seconds_induction_and_weights = time.time() - induction_start
+
         del model
         if device == "cuda":
             torch.cuda.empty_cache()
@@ -162,6 +170,8 @@ def main():
         tokens_per_layer_statistics = tokens.shape[0] * (tokens.shape[1] - skip_first)
 
         for layer, blocked_moments in collected["moments"].items():
+            layer_start = time.time()
+
             # the noise level of this layer's correlations: effective independent tokens (noise.py)
             lag_one = collected["lag_one_correlation"].get(layer)
             effective_tokens = None
@@ -223,6 +233,10 @@ def main():
             if layer in collected["prompt_entropy"]:
                 layer_results[layer]["baselines_prompt_entropy"] = collected["prompt_entropy"][layer]
 
+            # where the time goes (P1.1): analysis and saving of this layer
+            layer_results[layer]["seconds_layer"] = time.time() - layer_start
+            print(f"step {step}: layer {layer} analysed and saved in {layer_results[layer]['seconds_layer']:.0f} s", flush=True)
+
         summary = {
             "model_name": config["model_name"],
             "step": step,
@@ -232,6 +246,7 @@ def main():
             "induction": induction,
             "layers": layer_results,
             "seconds_model": collected["elapsed_seconds"],
+            "seconds_induction_and_weights": seconds_induction_and_weights,
             "seconds_total": time.time() - step_start,
             "device": device,
         }

@@ -25,10 +25,18 @@ project does not depend on TransformerLens' version.
 
 What happens to the activations
 -------------------------------
-They are never stored. For each batch and layer we compute, on the GPU:
+They are never stored. For each batch, layer and bootstrap block we compute, on the GPU:
     token count, mean, centred scatter matrix (m x m), active count, largest |activation|
-and merge those into a BlockedNeuronMoments on the CPU (moments.py). One batch of 16 sequences x
-256 tokens x 2048 neurons in float32 is 33 MB; its scatter matrix is 16 MB.
+and merge them, still on the GPU and in float64, into a running total per layer and block (the
+same Chan-Golub-LeVeque merge as moments.py). Only at the end of the probe text do those totals go
+to the CPU, once, into a BlockedNeuronMoments. One batch of 16 sequences x 256 tokens x 2048
+neurons in float32 is 33 MB; one scatter matrix is 16 MB in float32 and 32 MB in float64. The
+running totals take layers x blocks x 32 MB of GPU memory (6 x 8 x 32 MB = 1.6 GB for Pythia-70M).
+
+Until 8 Nov 2026 every batch's scatter matrices were copied to the CPU and merged there: 3,072
+copies of 32 MB per checkpoint, which took about 1,000 of the 2,300 seconds of the first smoke test
+on the Aero. Same formula and same order of merging; only where the merge happens changed, so
+the numbers agree up to rounding in the last digits.
 
 GPU notes for AB's machine (Pascal GTX 1060): FP32 only (DECISIONS / AGENTS.md), one run per
 card with CUDA_VISIBLE_DEVICES.
@@ -218,6 +226,13 @@ def collect_neuron_moments(
         for layer in layers:
             sample_storage[layer] = np.zeros((len(sequence_index), number_of_neurons), dtype=np.float32)
 
+    # running totals per layer and block, kept on the device (see the module docstring)
+    device_totals = {}
+    for layer in layers:
+        device_totals[layer] = {}
+        for block_index in range(number_of_blocks):
+            device_totals[layer][block_index] = empty_device_totals()
+
     start_time = time.time()
 
     try:
@@ -297,15 +312,10 @@ def collect_neuron_moments(
                         block_activations = activations[rows_in_batch]
                         block_activations = block_activations.reshape(-1, number_of_neurons)
 
-                        summary = summarise_on_device(block_activations, active_threshold)
-
-                        moments_per_layer[layer].add_batch_summary(
-                            int(block_index),
-                            summary["count"],
-                            summary["mean"],
-                            summary["scatter"],
-                            summary["active_count"],
-                            summary["max_abs"],
+                        merge_batch_into_device_totals(
+                            device_totals[layer][int(block_index)],
+                            block_activations,
+                            active_threshold,
                         )
 
                 captured.clear()
@@ -313,6 +323,22 @@ def collect_neuron_moments(
     finally:
         for handle in handles:
             handle.remove()
+
+    # the running totals go to the CPU once per layer and block
+    for layer in layers:
+        for block_index in range(number_of_blocks):
+            totals = device_totals[layer][block_index]
+            if totals["count"] == 0:
+                continue
+            moments_per_layer[layer].add_batch_summary(
+                block_index,
+                totals["count"],
+                totals["mean"].cpu().numpy(),
+                totals["scatter"].cpu().numpy(),
+                totals["active_count"].cpu().numpy(),
+                totals["max_abs"].cpu().numpy(),
+            )
+    device_totals.clear()
 
     elapsed_seconds = time.time() - start_time
 
@@ -419,13 +445,83 @@ def token_gram_on_device(token_activations):
     return gram.double().cpu().numpy()
 
 
+def empty_device_totals():
+    """
+    Running totals of one layer and one bootstrap block, before any batch has been added.
+    The tensors are created by the first batch, on that batch's device.
+    """
+    totals = {
+        "count": 0,
+        "mean": None,
+        "scatter": None,
+        "active_count": None,
+        "max_abs": None,
+    }
+    return totals
+
+
+def merge_batch_into_device_totals(totals, activations, active_threshold):
+    """
+    Add one batch of activations (tokens, neurons), a tensor on the GPU or CPU, to the running
+    totals of its layer and block, without leaving the device.
+
+    The batch is centred on its own mean and its scatter computed in float32 (accurate enough once
+    centred, method notes section 13); everything that is accumulated is float64. The merge is
+    the Chan-Golub-LeVeque update, line for line the same as NeuronMoments._merge in moments.py:
+        delta   = batch_mean - mean
+        mean    = mean + delta * batch_count / total_count
+        scatter = scatter + batch_scatter + outer(delta, delta) * count * batch_count / total_count
+    """
+    import torch
+
+    batch_count = int(activations.shape[0])
+
+    if batch_count == 0:
+        return
+
+    batch_mean = activations.mean(dim=0)
+    batch_centred = activations - batch_mean
+    batch_scatter = batch_centred.T @ batch_centred
+
+    batch_mean_double = batch_mean.double()
+    batch_scatter_double = batch_scatter.double()
+    batch_active_count = (activations > active_threshold).sum(dim=0)
+    batch_max_abs = activations.abs().max(dim=0).values.double()
+
+    if totals["count"] == 0:
+        totals["count"] = batch_count
+        totals["mean"] = batch_mean_double
+        totals["scatter"] = batch_scatter_double
+        totals["active_count"] = batch_active_count
+        totals["max_abs"] = batch_max_abs
+        return
+
+    previous_count = totals["count"]
+    total_count = previous_count + batch_count
+
+    delta = batch_mean_double - totals["mean"]
+
+    new_mean = totals["mean"] + delta * (batch_count / total_count)
+
+    cross_weight = previous_count * batch_count / total_count
+    cross_term = torch.outer(delta, delta) * cross_weight
+    new_scatter = totals["scatter"] + batch_scatter_double + cross_term
+
+    totals["count"] = total_count
+    totals["mean"] = new_mean
+    totals["scatter"] = new_scatter
+    totals["active_count"] = totals["active_count"] + batch_active_count
+    totals["max_abs"] = torch.maximum(totals["max_abs"], batch_max_abs)
+
+
 def summarise_on_device(activations, active_threshold):
     """
     Count, mean, centred scatter, active count and max |x| for a (tokens, neurons) tensor,
     computed where the tensor lives (GPU or CPU) and returned as numpy arrays.
 
     Centring on the batch mean before multiplying keeps float32 accurate enough; the merge across
-    batches happens in float64 on the CPU (moments.py).
+    batches happens in float64 on the CPU (moments.py). No longer used by collect_neuron_moments
+    (which merges on the device, merge_batch_into_device_totals); kept for notebooks and tests.
     """
     count = activations.shape[0]
 

@@ -58,6 +58,14 @@ class Tensor:
     def __matmul__(self, o): return Tensor(self.a @ self._v(o))
 
 
+def outer(first, second):
+    return Tensor(np.outer(first.a, second.a))
+
+
+def maximum(first, second):
+    return Tensor(np.maximum(first.a, second.a))
+
+
 def as_tensor(data, dtype=None, device=None):
     return Tensor(np.asarray(data, dtype=dtype))
 
